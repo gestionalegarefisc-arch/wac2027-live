@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAC 2027 - Live Results</title>
+    
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f8f9fa; margin: 0; padding: 0; color: #333; }
+        
+        .header { display: flex; flex-direction: column; align-items: center; justify-content: center; background: #004085; color: white; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .header-logos { display: flex; gap: 15px; margin-bottom: 10px; }
+        .header-logos img { height: 50px; background: white; border-radius: 5px; padding: 2px; }
+        .header h1 { margin: 0; font-size: 22px; text-align: center; }
+        
+        .container { padding: 15px; max-width: 1000px; margin: 0 auto; }
+
+        .dashboard { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 20px; }
+        .btn-dash { background: white; color: #004085; border: 2px solid #004085; border-radius: 8px; padding: 10px 5px; font-size: 14px; font-weight: bold; cursor: pointer; transition: 0.2s; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;}
+        .btn-dash:hover { background: #e9ecef; }
+        .btn-dash.active { background: #004085; color: white; }
+        
+        .dash-icon { height: 26px; max-width: 100px; object-fit: contain; }
+
+        .filter-bar { display: none; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 20px; text-align: center; }
+        .filter-bar select { padding: 10px; font-size: 16px; border: 1px solid #ced4da; border-radius: 5px; min-width: 150px; font-weight: bold; }
+        .status-badge { display: inline-block; background: #198754; color: white; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-top: 10px; }
+        .status-syncing { background: #ffc107; color: black; }
+
+        .table-container { background: white; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        th { background: #002752; color: white; padding: 12px; text-align: left; text-transform: uppercase; font-size: 13px; position: sticky; top: 0; }
+        td { padding: 12px; border-bottom: 1px solid #e9ecef; vertical-align: middle; font-size: 14px; }
+        tr:nth-child(even) td { background-color: #f8f9fa; }
+        
+        .badge-rank { background-color: #0dcaf0; color: #000; font-weight: bold; display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 50%; font-size: 14px; border: 2px solid #0056b3; }
+        .out-rank { background-color: #e9ecef; color: #6c757d; border-color: transparent;}
+        
+        .score-big { font-size: 18px; font-weight: bold; color: #004085; }
+        .row-out { color: #dc3545; }
+        .row-out .score-big { color: #dc3545; }
+
+        #welcome-msg { text-align: center; padding: 50px 20px; color: #6c757d; font-size: 18px; }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <div class="header-logos">
+            <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" crossorigin="anonymous">
+            <img src="https://lh3.googleusercontent.com/d/1h0cOsNsO7nV9CA4o2vc1MQSvvlCov0px" crossorigin="anonymous">
+        </div>
+        <h1>WAC 2027 Live Results</h1>
+    </div>
+
+    <div class="container">
+        
+        <div class="dashboard">
+            <button class="btn-dash" onclick="apriGara('Agility', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Agility
+            </button>
+            <button class="btn-dash" onclick="apriGara('Jumping', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Jumping
+            </button>
+            <button class="btn-dash" onclick="apriGara('Snooker', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Snooker
+            </button>
+            <button class="btn-dash" onclick="apriGara('Gambler', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Gambler
+            </button>
+            <button class="btn-dash" style="border-color:#198754; color:#198754;" onclick="apriGara('Biathlon B1', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Biathlon B1
+            </button>
+            <button class="btn-dash" style="border-color:#198754; color:#198754;" onclick="apriGara('Biathlon B2', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Biathlon B2
+            </button>
+            <button class="btn-dash" style="border-color:#0d6efd; color:#0d6efd;" onclick="apriGara('Triathlon T1', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Triathlon T1
+            </button>
+            <button class="btn-dash" style="border-color:#0d6efd; color:#0d6efd;" onclick="apriGara('Triathlon T2', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Triathlon T2
+            </button>
+            <button class="btn-dash" style="background:#0d6efd; color:white;" onclick="apriGara('Triathlon T3', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Triathlon Relay T3
+            </button>
+        </div>
+
+        <div class="filter-bar" id="barra-filtri">
+            <label style="color:#004085; font-weight:bold; margin-right:10px;">Height (Jump-Up):</label>
+            <select id="altezza-live" onchange="disegnaClassificaLive()">
+                <option value="250">250</option>
+                <option value="300">300</option>
+                <option value="400">400</option>
+                <option value="500">500</option>
+                <option value="600">600</option>
+            </select>
+            <br>
+            <div id="badge-sync" class="status-badge status-syncing">↻ Aggiornamento in corso...</div>
+        </div>
+
+        <div id="welcome-msg">Seleziona una gara dal menu in alto per visualizzare la classifica in tempo reale.</div>
+        
+        <div class="table-container" id="area-tabella" style="display:none;">
+            <table>
+                <thead id="live-head"></thead>
+                <tbody id="live-body"></tbody>
+            </table>
+        </div>
+    </div>
+
+<script>
+    // =========================================================================
+    // INSERISCI QUI TRA LE VIRGOLETTE IL TUO LINK APPS SCRIPT UFFICIALE (/exec)
+    // =========================================================================
+  const MIO_LINK_SCRIPT = "[https://script.google.com/macros/s/AKfycbw6qAxK-JyVMM5pnHLGOQQCbk_mfa9CPo3hft-1vOe8AFxEGPVGRh7d-YmRzpKirANd/exec](https://script.google.com/macros/s/AKfycbw6qAxK-JyVMM5pnHLGOQQCbk_mfa9CPo3hft-1vOe8AFxEGPVGRh7d-YmRzpKirANd/exec)";
+    
+    // Non toccare questa riga
+    const SCRIPT_URL = MIO_LINK_SCRIPT + "?azione=ottieni_dati_live";
+
+    let iscrittiLive = [];
+    let risultatiLive = {};
+    let squadreLive = [];
+    
+    let garaAttiva = "";
+    let pollingInterval = null;
+
+    function getSigla(n) { return n ? `[${n.substring(0,3).toUpperCase()}]` : ""; }
+
+    function scaricaDatiServer(isPrimoAvvio) {
+        if(!isPrimoAvvio) document.getElementById('badge-sync').className = "status-badge status-syncing";
+        if(!isPrimoAvvio) document.getElementById('badge-sync').innerText = "↻ Ricerca nuovi tempi...";
+
+        if(MIO_LINK_SCRIPT.includes("INSERISCI_QUI")) {
+            document.getElementById('welcome-msg').innerText = "🔴 ATTENZIONE: Devi incollare il link del tuo Apps Script nel file HTML (riga 148).";
+            return;
+        }
+
+        fetch(SCRIPT_URL, { method: 'GET', mode: 'cors' })
+        .then(response => response.json())
+        .then(data => {
+            iscrittiLive = data.iscritti || [];
+            risultatiLive = data.risultati || {};
+            squadreLive = data.squadre || [];
+
+            if(isPrimoAvvio) {
+                document.getElementById('welcome-msg').innerText = "🟢 Connesso al server gara. Seleziona una competizione in alto.";
+            } else if(garaAttiva !== "") {
+                disegnaClassificaLive(); 
+                document.getElementById('badge-sync').className = "status-badge";
+                document.getElementById('badge-sync').innerText = "🟢 Risultati Live (Auto-Sync)";
+            }
+        })
+        .catch(error => {
+            console.error('Errore nel recupero dati:', error);
+            document.getElementById('badge-sync').className = "status-badge status-syncing";
+            document.getElementById('badge-sync').innerText = "🔴 Errore di connessione. Riprovo...";
+        });
+    }
+
+    window.onload = function() {
+        scaricaDatiServer(true);
+        pollingInterval = setInterval(function() { scaricaDatiServer(false); }, 15000);
+    };
+
+    function apriGara(nomeGara, btn) {
+        document.querySelectorAll('.btn-dash').forEach(b => b.classList.remove('active'));
+        if(btn) btn.classList.add('active');
+
+        garaAttiva = nomeGara;
+        document.getElementById('welcome-msg').style.display = 'none';
+        
+        let barraFiltri = document.getElementById('barra-filtri');
+        let selAlt = document.getElementById('altezza-live');
+
+        if (garaAttiva === "Triathlon T3") {
+            selAlt.style.display = 'none';
+            selAlt.previousElementSibling.style.display = 'none'; 
+        } else {
+            selAlt.style.display = 'inline-block';
+            selAlt.previousElementSibling.style.display = 'inline-block';
+        }
+        
+        barraFiltri.style.display = 'block';
+        document.getElementById('area-tabella').style.display = 'block';
+        
+        disegnaClassificaLive();
+    }
+
+    function disegnaClassificaLive() {
+        let head = document.getElementById('live-head');
+        let body = document.getElementById('live-body');
+        
+        head.innerHTML = "";
+        body.innerHTML = "";
+
+        if(!garaAttiva) return;
+        if(!risultatiLive[garaAttiva]) risultatiLive[garaAttiva] = {};
+
+        let alt = document.getElementById('altezza-live').value;
+        const isG = (garaAttiva === "Snooker" || garaAttiva === "Gambler"); 
+        const isC = garaAttiva.includes("Biathlon") || garaAttiva === "Triathlon T1" || garaAttiva === "Triathlon T2";
+
+        if (garaAttiva === "Triathlon T3") {
+            head.innerHTML = `<tr><th width="40">Rank</th><th>Team</th><th width="50">Ord.</th><th>Dog (Jump)</th><th width="70">Time</th><th width="50">Err</th><th width="50">Ref</th><th width="80">SCORE</th></tr>`;
+            
+            if(!squadreLive || squadreLive.length === 0) {
+                return body.innerHTML = `<tr><td colspan="8" align="center" style="padding:30px; font-style:italic;">Nessuna squadra iscritta.</td></tr>`;
+            }
+
+            let teamScores = squadreLive.map(sq => {
+                let penT3 = 0; let completi = 0;
+                sq.membri.forEach(m => { 
+                    let d = risultatiLive[garaAttiva][m.pett] || {}; 
+                    let t = parseFloat((d.tempo||"0").toString().replace(',','.'))||0;
+                    if(t > 0 || ['E','A','DIS','ABS'].includes(d.esito)) {
+                        penT3 += (t>0 && !['E','A','DIS','ABS'].includes(d.esito)) ? (t + ((parseInt(d.err)||0)*5) + ((parseInt(d.rif)||0)*5)) : 100;
+                        completi++;
+                    } else penT3 += 100; 
+                });
+                return { sq: sq, score: penT3, completato: completi === 3 };
+            });
+
+            let sortedForRank = [...teamScores].sort((a,b) => {
+                if(!a.completato && b.completato) return 1; if(a.completato && !b.completato) return -1; return a.score - b.score;
+            });
+
+            teamScores.sort((a,b) => {
+                let oA = (iscrittiLive.find(x=>x.pett===a.sq.membri[0].pett)||{}).ordini?.[garaAttiva] || 999;
+                let oB = (iscrittiLive.find(x=>x.pett===b.sq.membri[0].pett)||{}).ordini?.[garaAttiva] || 999;
+                return oA - oB;
+            });
+
+            teamScores.forEach(ts => {
+                let isOutTeam = ts.score >= 300;
+                let rankHtml = `<span class="badge-rank out-rank">-</span>`;
+                if(ts.completato && !isOutTeam) {
+                    let r = sortedForRank.findIndex(x => x.sq.id === ts.sq.id) + 1;
+                    rankHtml = `<span class="badge-rank">${r}</span>`;
+                }
+
+                let sqNameClass = isOutTeam ? "row-out" : "";
+
+                let tr1 = `<tr>
+                    <td rowspan="3" style="text-align:center;">${rankHtml}</td>
+                    <td rowspan="3" class="${sqNameClass}"><b>${getSigla(ts.sq.nazione)} ${ts.sq.nome}</b><br><small style="color:#6c757d;">Total:</small> <b style="font-size:16px;">${ts.score.toFixed(3).replace('.',',')}</b></td>`;
+                
+                ts.sq.membri.forEach((m, i) => {
+                    let rowHtml = getRowHtmlT3(m, garaAttiva);
+                    body.innerHTML += (i===0) ? tr1+rowHtml : `<tr>${rowHtml}</tr>`;
+                });
+            });
+            return;
+        }
+
+        if (isG) head.innerHTML = `<tr><th width="40">Rank</th><th width="50">Bib</th><th>Handler & Dog</th><th width="70">Time</th><th width="70">Pts.</th><th width="90">SCORE</th></tr>`;
+        else if(isC) head.innerHTML = `<tr><th width="40">Rank</th><th width="50">Bib</th><th>Handler & Dog</th><th width="70">Time</th><th width="50">Err</th><th width="50">Ref</th><th width="90">SCORE</th></tr>`;
+        else head.innerHTML = `<tr><th width="40">Rank</th><th width="50">Bib</th><th>Handler & Dog</th><th width="70">Time</th><th width="50">Err</th><th width="50">Ref</th><th width="90">TOTAL</th></tr>`;
+
+        let listaAttivi = [];
+        if(garaAttiva.includes('Triathlon')) {
+            squadreLive.forEach(sq => { sq.membri.forEach(m => { if(m.jumpUp === alt) { let c = iscrittiLive.find(x=>x.pett===m.pett); if(c) listaAttivi.push({ isTeam: true, sq: sq, m: m, c: c }); } }); });
+        } else {
+            iscrittiLive.filter(b => b.cat === alt).forEach(c => listaAttivi.push({ isTeam: false, c: c }));
+        }
+
+        if(listaAttivi.length === 0) {
+            return body.innerHTML = `<tr><td colspan="7" align="center" style="padding:30px; font-style:italic;">Nessun atleta in questa altezza.</td></tr>`;
+        }
+
+        let calcolati = listaAttivi.map(item => {
+            let pett = item.isTeam ? item.m.pett : item.c.pett;
+            let d = risultatiLive[garaAttiva][pett] || {tempo:"", esito:""};
+            let floatT = parseFloat((d.tempo||"0").toString().replace(',','.')) || 0; 
+            let hasT = (floatT > 0); 
+            let isOut = ['E','A','DIS','ABS'].includes(d.esito);
+            let scoreF = 0; let testoS = "-";
+
+            if (isOut) { testoS = d.esito; } 
+            else if (hasT) { 
+                if (isG) { scoreF = parseInt(d.punti)||0; testoS = scoreF.toString(); } 
+                else { scoreF = floatT + ((parseInt(d.err)||0)*5) + ((parseInt(d.rif)||0)*5); testoS = scoreF.toFixed(3).replace('.', ','); } 
+            }
+            return { ...item, pett: pett, d: d, hasT: hasT, isOut: isOut, scoreF: scoreF, testoS: testoS, floatT: floatT };
+        });
+
+        let ordinati = [...calcolati].sort((a,b) => { 
+            if(a.isOut && !b.isOut) return 1; if(!a.isOut && b.isOut) return -1; if(!a.hasT && b.hasT) return 1; if(a.hasT && !b.hasT) return -1; if(!a.hasT && !b.hasT) return 0; 
+            if(isG) return b.scoreF - a.scoreF; return a.scoreF - b.scoreF; 
+        });
+
+        calcolati.sort((a,b) => ((a.c.ordini && a.c.ordini[garaAttiva])||999) - ((b.c.ordini && b.c.ordini[garaAttiva])||999));
+
+        calcolati.forEach(item => {
+            let rowClass = item.isOut ? "row-out" : "";
+            let rankHtml = `<span class="badge-rank out-rank">-</span>`;
+            if(item.hasT && !item.isOut) {
+                let r = ordinati.findIndex(x => x.pett === item.pett) + 1;
+                rankHtml = `<span class="badge-rank">${r}</span>`;
+            }
+
+            let nomeHtml = `<b>${item.c.conduttore} - ${item.c.cane}</b><br><small>${getSigla(item.c.nazione)} ${item.c.nazione}</small>`;
+            if(item.isTeam) nomeHtml = `<b>${item.c.conduttore} - ${item.c.cane}</b><br><small style="color:#004085; font-weight:bold;">${getSigla(item.sq.nazione)} ${item.sq.nome}</small>`;
+
+            let oT = (item.hasT&&!item.isOut) ? item.d.tempo : (item.isOut ? item.d.esito : "-");
+
+            let h = `<tr class="${rowClass}">
+                <td align="center">${rankHtml}</td>
+                <td><b>${item.pett}</b></td>
+                <td>${nomeHtml}</td>
+                <td><b>${oT}</b></td>`;
+
+            if(isG) {
+                h += `<td>${(item.hasT&&!item.isOut)?(item.d.punti||"-"):"-"}</td><td class="score-big">${item.testoS}</td></tr>`;
+            } else {
+                h += `<td>${(item.hasT&&!item.isOut)?(item.d.err||"-"):"-"}</td><td>${(item.hasT&&!item.isOut)?(item.d.rif||"-"):"-"}</td><td class="score-big">${item.testoS}</td></tr>`;
+            }
+            body.innerHTML += h;
+        });
+    }
+
+    function getRowHtmlT3(m, manche) {
+        let d = risultatiLive[manche][m.pett] || {}; 
+        let c = iscrittiLive.find(x=>x.pett===m.pett) || {pett: m.pett, cane:"Sconosciuto", ordini:{}};
+        let ord = (c.ordini && c.ordini[manche]) ? c.ordini[manche] : '-';
+        
+        let t = parseFloat((d.tempo||"0").toString().replace(',','.'))||0; 
+        let hasT = (t > 0); 
+        let isOut = ['E','A','DIS','ABS'].includes(d.esito);
+        let rowC = isOut ? "row-out" : "";
+
+        let oT = (hasT&&!isOut) ? d.tempo : (isOut ? d.esito : "-");
+        let oS = (hasT&&!isOut) ? (t + ((parseInt(d.err)||0)*5) + ((parseInt(d.rif)||0)*5)).toFixed(3).replace('.',',') : "-";
+        
+        if(isOut) oS = d.esito;
+
+        return `<td class="${rowC}" style="color:#6c757d; font-size:12px;"><b>${ord}</b></td>
+                <td class="${rowC}">[${c.pett}] ${c.cane} <small>(S: ${m.jumpUp})</small></td>
+                <td class="${rowC}"><b>${oT}</b></td>
+                <td class="${rowC}">${(hasT&&!isOut)?(d.err||"-"):"-"}</td>
+                <td class="${rowC}">${(hasT&&!isOut)?(d.rif||"-"):"-"}</td>
+                <td class="${rowC}"><b>${oS}</b></td>`;
+    }
+
+</script>
+</body>
+</html>
