@@ -109,12 +109,7 @@
     </div>
 
 <script>
-    // =========================================================================
-    // INSERISCI QUI TRA LE VIRGOLETTE IL TUO LINK APPS SCRIPT UFFICIALE (/exec)
-    // =========================================================================
-const MIO_LINK_SCRIPT = "https://script.google.com/macros/s/AKfycbw6qAxK-JyVMM5pnHLGOQQCbk_mfa9CPo3hft-1vOe8AFxEGPVGRh7d-YmRzpKirANd/exec";
-    
-    // Non toccare questa riga
+    const MIO_LINK_SCRIPT = "https://script.google.com/macros/s/AKfycbw6qAxK-JyVMM5pnHLGOQQCbk_mfa9CPo3hft-1vOe8AFxEGPVGRh7d-YmRzpKirANd/exec";
     const SCRIPT_URL = MIO_LINK_SCRIPT + "?azione=ottieni_dati_live";
 
     let iscrittiLive = [];
@@ -125,21 +120,14 @@ const MIO_LINK_SCRIPT = "https://script.google.com/macros/s/AKfycbw6qAxK-JyVMM5p
     let pollingInterval = null;
 
     function getSigla(n) { return n ? `[${n.substring(0,3).toUpperCase()}]` : ""; }
-function scaricaDatiServer(isPrimoAvvio) {
+
+    function scaricaDatiServer(isPrimoAvvio) {
         if(!isPrimoAvvio) document.getElementById('badge-sync').className = "status-badge status-syncing";
         if(!isPrimoAvvio) document.getElementById('badge-sync').innerText = "↻ Ricerca nuovi tempi...";
 
-        if(MIO_LINK_SCRIPT.includes("INSERISCI_QUI")) {
-            document.getElementById('welcome-msg').innerText = "🔴 ATTENZIONE: Devi incollare il link del tuo Apps Script nel file HTML (riga 148).";
-            return;
-        }
-
-        // Chiamata JSONP tramite tag <script>
         let script = document.createElement('script');
-        // Aggiungiamo un timestamp per evitare la cache e specifichiamo il nome della funzione di callback (gestisciDatiJsonp)
         script.src = SCRIPT_URL + "&callback=gestisciDatiJsonp&t=" + new Date().getTime();
         
-        // Gestione errori nel caricamento dello script
         script.onerror = function() {
             console.error('Errore di connessione JSONP.');
             document.getElementById('badge-sync').className = "status-badge status-syncing";
@@ -148,13 +136,11 @@ function scaricaDatiServer(isPrimoAvvio) {
         
         document.body.appendChild(script);
         
-        // Rimuoviamo il tag script dopo averlo usato per non appesantire la pagina
         script.onload = function() {
             document.body.removeChild(script);
         };
     }
 
-    // Questa è la nuova funzione che verrà chiamata dal server con i dati
     function gestisciDatiJsonp(data) {
         if (data.errore) {
             console.error('Errore dal server:', data.errore);
@@ -167,22 +153,17 @@ function scaricaDatiServer(isPrimoAvvio) {
         risultatiLive = data.risultati || {};
         squadreLive = data.squadre || [];
 
-        // isPrimoAvvio è dedotto dallo stato dell'interfaccia (se il messaggio di benvenuto è visibile)
         let msgBenvenuto = document.getElementById('welcome-msg');
-        if (msgBenvenuto && msgBenvenuto.style.display !== 'none' && msgBenvenuto.innerText !== "🟢 Connesso al server gara. Seleziona una competizione in alto.") {
+        if (msgBenvenuto && msgBenvenuto.style.display !== 'none') {
             msgBenvenuto.innerText = "🟢 Connesso al server gara. Seleziona una competizione in alto.";
-        } else if (garaAttiva !== "") {
-            disegnaClassificaLive(); 
-            document.getElementById('badge-sync').className = "status-badge";
-            document.getElementById('badge-sync').innerText = "🟢 Risultati Live (Auto-Sync)";
         }
-    }
-        })
-        .catch(error => {
-            console.error('Errore nel recupero dati:', error);
-            document.getElementById('badge-sync').className = "status-badge status-syncing";
-            document.getElementById('badge-sync').innerText = "🔴 Errore di connessione. Riprovo...";
-        });
+        
+        if (garaAttiva !== "") {
+            disegnaClassificaLive(); 
+        }
+        
+        document.getElementById('badge-sync').className = "status-badge";
+        document.getElementById('badge-sync').innerText = "🟢 Risultati Live (Auto-Sync)";
     }
 
     window.onload = function() {
