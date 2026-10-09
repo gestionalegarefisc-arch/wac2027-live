@@ -125,8 +125,7 @@ const MIO_LINK_SCRIPT = "https://script.google.com/macros/s/AKfycbw6qAxK-JyVMM5p
     let pollingInterval = null;
 
     function getSigla(n) { return n ? `[${n.substring(0,3).toUpperCase()}]` : ""; }
-
-    function scaricaDatiServer(isPrimoAvvio) {
+function scaricaDatiServer(isPrimoAvvio) {
         if(!isPrimoAvvio) document.getElementById('badge-sync').className = "status-badge status-syncing";
         if(!isPrimoAvvio) document.getElementById('badge-sync').innerText = "↻ Ricerca nuovi tempi...";
 
@@ -135,20 +134,49 @@ const MIO_LINK_SCRIPT = "https://script.google.com/macros/s/AKfycbw6qAxK-JyVMM5p
             return;
         }
 
-        fetch(SCRIPT_URL, { method: 'GET', mode: 'cors' })
-        .then(response => response.json())
-        .then(data => {
-            iscrittiLive = data.iscritti || [];
-            risultatiLive = data.risultati || {};
-            squadreLive = data.squadre || [];
+        // Chiamata JSONP tramite tag <script>
+        let script = document.createElement('script');
+        // Aggiungiamo un timestamp per evitare la cache e specifichiamo il nome della funzione di callback (gestisciDatiJsonp)
+        script.src = SCRIPT_URL + "&callback=gestisciDatiJsonp&t=" + new Date().getTime();
+        
+        // Gestione errori nel caricamento dello script
+        script.onerror = function() {
+            console.error('Errore di connessione JSONP.');
+            document.getElementById('badge-sync').className = "status-badge status-syncing";
+            document.getElementById('badge-sync').innerText = "🔴 Errore di connessione. Riprovo...";
+        };
+        
+        document.body.appendChild(script);
+        
+        // Rimuoviamo il tag script dopo averlo usato per non appesantire la pagina
+        script.onload = function() {
+            document.body.removeChild(script);
+        };
+    }
 
-            if(isPrimoAvvio) {
-                document.getElementById('welcome-msg').innerText = "🟢 Connesso al server gara. Seleziona una competizione in alto.";
-            } else if(garaAttiva !== "") {
-                disegnaClassificaLive(); 
-                document.getElementById('badge-sync').className = "status-badge";
-                document.getElementById('badge-sync').innerText = "🟢 Risultati Live (Auto-Sync)";
-            }
+    // Questa è la nuova funzione che verrà chiamata dal server con i dati
+    function gestisciDatiJsonp(data) {
+        if (data.errore) {
+            console.error('Errore dal server:', data.errore);
+            document.getElementById('badge-sync').className = "status-badge status-syncing";
+            document.getElementById('badge-sync').innerText = "🔴 Errore nei dati. Riprovo...";
+            return;
+        }
+
+        iscrittiLive = data.iscritti || [];
+        risultatiLive = data.risultati || {};
+        squadreLive = data.squadre || [];
+
+        // isPrimoAvvio è dedotto dallo stato dell'interfaccia (se il messaggio di benvenuto è visibile)
+        let msgBenvenuto = document.getElementById('welcome-msg');
+        if (msgBenvenuto && msgBenvenuto.style.display !== 'none' && msgBenvenuto.innerText !== "🟢 Connesso al server gara. Seleziona una competizione in alto.") {
+            msgBenvenuto.innerText = "🟢 Connesso al server gara. Seleziona una competizione in alto.";
+        } else if (garaAttiva !== "") {
+            disegnaClassificaLive(); 
+            document.getElementById('badge-sync').className = "status-badge";
+            document.getElementById('badge-sync').innerText = "🟢 Risultati Live (Auto-Sync)";
+        }
+    }
         })
         .catch(error => {
             console.error('Errore nel recupero dati:', error);
