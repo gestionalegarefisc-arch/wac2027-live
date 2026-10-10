@@ -62,6 +62,9 @@
             <button class="btn-dash" onclick="apriGara('Gambler', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Gambler</button>
             <button class="btn-dash" style="border-color:#198754; color:#198754;" onclick="apriGara('Biathlon B1', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Biathlon B1</button>
             <button class="btn-dash" style="border-color:#198754; color:#198754;" onclick="apriGara('Biathlon B2', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Biathlon B2</button>
+            <button class="btn-dash" style="border-color:#0d6efd; color:#0d6efd;" onclick="apriGara('Triathlon T1', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Triathlon T1</button>
+            <button class="btn-dash" style="border-color:#0d6efd; color:#0d6efd;" onclick="apriGara('Triathlon T2', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Triathlon T2</button>
+            <button class="btn-dash" style="background:#0d6efd; color:white;" onclick="apriGara('Triathlon T3', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Triathlon T3</button>
         </div>
 
         <div class="filter-bar" id="barra-filtri">
@@ -114,7 +117,7 @@
     const MIO_LINK_SCRIPT = "https://script.google.com/macros/s/AKfycbw6qAxK-JyVMM5pnHLGOQQCbk_mfa9CPo3hft-1vOe8AFxEGPVGRh7d-YmRzpKirANd/exec";
     const SCRIPT_URL = MIO_LINK_SCRIPT + "?azione=ottieni_dati_live";
 
-    let iscrittiLive = []; let risultatiLive = {}; let garaAttiva = ""; let pollingInterval = null;
+    let iscrittiLive = []; let risultatiLive = {}; let squadreLive = []; let garaAttiva = ""; let pollingInterval = null;
     function getSigla(n) { return n ? `[${n.substring(0,3).toUpperCase()}]` : ""; }
 
     function scaricaDatiServer(isPrimoAvvio) {
@@ -134,7 +137,7 @@
 
     function gestisciDatiJsonp(data) {
         if (data.errore) return;
-        iscrittiLive = data.iscritti || []; risultatiLive = data.risultati || {};
+        iscrittiLive = data.iscritti || []; risultatiLive = data.risultati || {}; squadreLive = data.squadre || [];
         
         let msgBenvenuto = document.getElementById('welcome-msg');
         if (msgBenvenuto && msgBenvenuto.style.display !== 'none') msgBenvenuto.innerText = dict[lang].conn;
@@ -154,6 +157,15 @@
         if(btn) btn.classList.add('active');
         garaAttiva = nomeGara;
         document.getElementById('welcome-msg').style.display = 'none';
+        
+        let lblH = document.getElementById('lbl-height');
+        let selH = document.getElementById('altezza-live');
+        if (garaAttiva === "Triathlon T3") {
+            lblH.style.display = 'none'; selH.style.display = 'none';
+        } else {
+            lblH.style.display = 'inline-block'; selH.style.display = 'inline-block';
+        }
+        
         document.getElementById('barra-filtri').style.display = 'block';
         document.getElementById('area-tabella').style.display = 'block';
         disegnaClassificaLive();
@@ -162,8 +174,83 @@
     function disegnaClassificaLive() {
         let head = document.getElementById('live-head');
         let body = document.getElementById('live-body');
-        
-        // Intestazione con 9 colonne esatte[cite: 4]
+        let alt = document.getElementById('altezza-live').value;
+        body.innerHTML = "";
+        if(!garaAttiva) return;
+        if(!risultatiLive[garaAttiva]) risultatiLive[garaAttiva] = {};
+
+        // === LOGICA TRIATHLON T3 (SQUADRE) ===
+        if (garaAttiva === "Triathlon T3") {
+            head.innerHTML = `<tr><th width="50">${dict[lang].rank}</th><th class="text-left">TEAM</th><th width="40">${dict[lang].ord}</th><th class="text-left">${dict[lang].bin} (Jump-Up)</th><th width="70">${dict[lang].time}</th><th width="70">${dict[lang].errs}</th><th width="70">${dict[lang].ref}</th><th width="50">${dict[lang].ea}</th><th width="90">${dict[lang].pen}</th></tr>`;
+            
+            if (!squadreLive || squadreLive.length === 0) {
+                return body.innerHTML = `<tr><td colspan="9" align="center" style="padding:30px; font-style:italic;">Nessuna squadra iscritta.</td></tr>`;
+            }
+
+            let teamScores = squadreLive.map(sq => {
+                let penT3 = 0; let completi = 0;
+                sq.membri.forEach(m => {
+                    let d = risultatiLive[garaAttiva][m.pett] || {};
+                    let t = parseFloat((d.tempo||"0").toString().replace(',','.'))||0;
+                    if(t > 0 || ['E','A','DIS','ABS'].includes(d.esito)) {
+                        penT3 += (t>0 && !['E','A','DIS','ABS'].includes(d.esito)) ? (t + ((parseInt(d.err)||0)*5) + ((parseInt(d.rif)||0)*5)) : 100;
+                        completi++;
+                    } else penT3 += 100;
+                });
+                return { sq: sq, score: penT3, completato: completi === 3 };
+            });
+
+            let sorted = [...teamScores].sort((a,b) => {
+                if(!a.completato && b.completato) return 1; if(a.completato && !b.completato) return -1; return a.score - b.score;
+            });
+
+            teamScores.sort((a,b) => {
+                let oA = (iscrittiLive.find(x=>x.pett===a.sq.membri[0].pett)||{}).ordini?.[garaAttiva] || 999;
+                let oB = (iscrittiLive.find(x=>x.pett===b.sq.membri[0].pett)||{}).ordini?.[garaAttiva] || 999;
+                return oA - oB;
+            });
+
+            teamScores.forEach(ts => {
+                let rankHtml = `<span class="badge-rank out-rank">-</span>`;
+                if(ts.completato) {
+                    let r = sorted.findIndex(x => x.sq.id === ts.sq.id) + 1;
+                    rankHtml = `<span class="badge-rank">${r}</span>`;
+                }
+                let isOutTeam = ts.score >= 300;
+                let sqClass = isOutTeam ? "row-out" : "";
+
+                let tr1 = `<tr class="${sqClass}">
+                    <td rowspan="3" align="center">${rankHtml}</td>
+                    <td rowspan="3" class="text-left"><b>${getSigla(ts.sq.nazione)} ${ts.sq.nome}</b><br><small style="color:#6c757d;">Total SCORE:</small> <b>${ts.score.toFixed(3).replace('.',',')}</b></td>`;
+
+                ts.sq.membri.forEach((m, i) => {
+                    let d = risultatiLive[garaAttiva][m.pett] || {};
+                    let c = iscrittiLive.find(x=>x.pett===m.pett) || {pett: m.pett, cane:"Sconosciuto", ordini:{}};
+                    let ord = (c.ordini && c.ordini[garaAttiva]) ? c.ordini[garaAttiva] : '-';
+                    
+                    let t = parseFloat((d.tempo||"0").toString().replace(',','.'))||0;
+                    let hasT = (t > 0); let isOut = ['E','A','DIS','ABS'].includes(d.esito);
+                    
+                    let oT = (hasT&&!isOut) ? d.tempo : (isOut ? "" : "-");
+                    let eaVal = isOut ? d.esito : "";
+                    let oS = (hasT&&!isOut) ? (t + ((parseInt(d.err)||0)*5) + ((parseInt(d.rif)||0)*5)).toFixed(3).replace('.',',') : (isOut ? d.esito : "-");
+                    let rowC = isOut ? "row-out" : "";
+
+                    let rowHtml = `<td class="${rowC}"><span class="badge-ord">${ord}</span></td>
+                        <td class="text-left ${rowC}">[${c.pett}] ${c.cane} <small>(H: ${m.jumpUp})</small></td>
+                        <td class="${rowC}"><b>${oT}</b></td>
+                        <td class="${rowC}">${(hasT&&!isOut)?(d.err||""):""}</td>
+                        <td class="${rowC}">${(hasT&&!isOut)?(d.rif||""):""}</td>
+                        <td class="${rowC}" style="font-weight:bold;">${eaVal}</td>
+                        <td class="${rowC} score-big">${oS}</td>`;
+                    
+                    body.innerHTML += (i===0) ? tr1 + rowHtml + "</tr>" : `<tr class="${sqClass}">${rowHtml}</tr>`;
+                });
+            });
+            return;
+        }
+
+        // === LOGICA STANDARD 9 COLONNE (T1, T2 compresi) ===
         head.innerHTML = `<tr>
             <th width="40">${dict[lang].ord}</th>
             <th width="50">${dict[lang].pett}</th>
@@ -175,20 +262,29 @@
             <th width="90">${dict[lang].pen}</th>
             <th width="50">${dict[lang].rank}</th>
         </tr>`;
-        
-        body.innerHTML = "";
-        if(!garaAttiva) return;
-        if(!risultatiLive[garaAttiva]) risultatiLive[garaAttiva] = {};
 
-        let alt = document.getElementById('altezza-live').value;
-        let atleti = iscrittiLive.filter(b => b.cat === alt);
+        let atleti = [];
+        if (garaAttiva.includes('Triathlon') && garaAttiva !== 'Triathlon T3') {
+            squadreLive.forEach(sq => {
+                sq.membri.forEach(m => {
+                    if (m.jumpUp === alt) {
+                        let c = iscrittiLive.find(x => x.pett === m.pett);
+                        if (c) atleti.push({ c: c, isTeam: true, sq: sq, pett: m.pett });
+                    }
+                });
+            });
+        } else {
+            iscrittiLive.filter(b => b.cat === alt).forEach(c => {
+                atleti.push({ c: c, isTeam: false, pett: c.pett });
+            });
+        }
 
         if(atleti.length === 0) {
             return body.innerHTML = `<tr><td colspan="9" align="center" style="padding:30px; font-style:italic;">${dict[lang].no_ath}</td></tr>`;
         }
 
-        let calcolati = atleti.map(c => {
-            let d = risultatiLive[garaAttiva][c.pett] || {tempo:"", esito:""};
+        let calcolati = atleti.map(item => {
+            let d = risultatiLive[garaAttiva][item.pett] || {tempo:"", esito:""};
             let floatT = parseFloat((d.tempo||"0").toString().replace(',','.')) || 0; 
             let hasT = (floatT > 0); 
             let isOut = ['E','A','DIS','ABS'].includes(d.esito);
@@ -202,25 +298,22 @@
                 testoS = scoreF.toFixed(3).replace('.', ','); 
             }
             
-            // Estrazione ordine di partenza
-            let ord = (c.ordini && c.ordini[garaAttiva]) ? parseInt(c.ordini[garaAttiva]) : 999;
-            
-            return { c: c, pett: c.pett, d: d, hasT: hasT, isOut: isOut, scoreF: scoreF, testoS: testoS, eaVal: eaVal, ord: ord };
+            let ord = (item.c.ordini && item.c.ordini[garaAttiva]) ? parseInt(item.c.ordini[garaAttiva]) : 999;
+            return { ...item, d: d, hasT: hasT, isOut: isOut, scoreF: scoreF, testoS: testoS, eaVal: eaVal, ord: ord };
         });
 
-        // Creazione array ordinato per i RANK
+        // Ordinamento per RANK
         let ordinati = [...calcolati].sort((a,b) => { 
             if(a.isOut && !b.isOut) return 1; if(!a.isOut && b.isOut) return -1; if(!a.hasT && b.hasT) return 1; if(a.hasT && !b.hasT) return -1; if(!a.hasT && !b.hasT) return 0; 
             return a.scoreF - b.scoreF; 
         });
 
-        // ORDINAMENTO FINALE PER LA VISUALIZZAZIONE (Per Ordine di partenza come da screenshot)[cite: 4]
+        // Ordinamento VISIVO (Per ordine di partenza)
         calcolati.sort((a,b) => a.ord - b.ord);
 
         calcolati.forEach((item) => {
             let rowClass = item.isOut ? "row-out" : "";
             
-            // Calcolo RANK
             let rankHtml = `<span class="badge-rank out-rank">-</span>`;
             if(item.hasT && !item.isOut) {
                 let r = ordinati.findIndex(x => x.pett === item.pett) + 1;
@@ -228,8 +321,10 @@
             }
 
             let nomeHtml = `<b>${item.c.conduttore} - ${item.c.cane}</b><br><small style="color:#6c757d;">${getSigla(item.c.nazione)} ${item.c.nazione}</small>`;
-            
-            // Gestione dei valori da mostrare[cite: 4]
+            if (item.isTeam) {
+                nomeHtml = `<b>${item.c.conduttore} - ${item.c.cane}</b><br><small style="color:#004085; font-weight:bold;">${getSigla(item.sq.nazione)} ${item.sq.nome}</small>`;
+            }
+
             let showTime = (item.hasT && !item.isOut) ? item.d.tempo : "";
             let showErr = (item.hasT && !item.isOut) ? (item.d.err || "") : "";
             let showRif = (item.hasT && !item.isOut) ? (item.d.rif || "") : "";
@@ -246,7 +341,6 @@
                 <td class="score-big">${item.testoS}</td>
                 <td>${rankHtml}</td>
             </tr>`;
-            
             body.innerHTML += h;
         });
     }
