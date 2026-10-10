@@ -151,7 +151,8 @@
         }
     }
 
-    const MIO_LINK_SCRIPT = "https://script.google.com/macros/s/AKfycbw6qAxK-JyVMM5pnHLGOQQCbk_mfa9CPo3hft-1vOe8AFxEGPVGRh7d-YmRzpKirANd/exec";
+    // ECCO IL TUO LINK CORRETTO INSERITO
+    const MIO_LINK_SCRIPT = "https://script.google.com/macros/s/AKfycbzeJWYtetDTliunAMA557c71979h57EZicymYu6Q9606rkj2zVZR1Vmp5rw2HG2sY8m/exec";
     const SCRIPT_URL = MIO_LINK_SCRIPT + "?azione=ottieni_dati_live";
 
     let iscrittiLive = []; 
@@ -161,7 +162,6 @@
     let pollingInterval = null;
     
     function getSigla(n) { 
-        // Traduzione dinamica della sigla a prescindere dalla lingua in cui è stata salvata
         const map = {"Italy":"ITA", "Italia":"ITA", "Spain":"ESP", "Spagna":"ESP", "France":"FRA", "Francia":"FRA", "Great Britain":"GBR", "Gran Bretagna":"GBR", "Germany":"GER", "Germania":"GER", "Switzerland":"SUI", "Svizzera":"SUI", "United States":"USA", "Stati Uniti":"USA", "Japan":"JPN", "Giappone":"JPN", "Belgium":"BEL", "Belgio":"BEL", "Netherlands":"NED", "Olanda":"NED"};
         if (map[n]) return '[' + map[n] + ']';
         return n ? `[${n.substring(0,3).toUpperCase()}]` : ""; 
