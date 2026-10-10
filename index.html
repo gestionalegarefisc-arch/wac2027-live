@@ -56,19 +56,37 @@
 
     <div class="container">
         <div class="dashboard">
-            <button class="btn-dash" onclick="apriGara('Agility', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Agility</button>
-            <button class="btn-dash" onclick="apriGara('Jumping', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Jumping</button>
-            <button class="btn-dash" onclick="apriGara('Snooker', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Snooker</button>
-            <button class="btn-dash" onclick="apriGara('Gambler', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Gambler</button>
-            <button class="btn-dash" style="border-color:#198754; color:#198754;" onclick="apriGara('Biathlon B1', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Biathlon B1</button>
-            <button class="btn-dash" style="border-color:#198754; color:#198754;" onclick="apriGara('Biathlon B2', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Biathlon B2</button>
-            <button class="btn-dash" style="border-color:#0d6efd; color:#0d6efd;" onclick="apriGara('Triathlon T1', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Triathlon T1</button>
-            <button class="btn-dash" style="border-color:#0d6efd; color:#0d6efd;" onclick="apriGara('Triathlon T2', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Triathlon T2</button>
-            <button class="btn-dash" style="background:#0d6efd; color:white;" onclick="apriGara('Triathlon T3', this)"><img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Triathlon T3</button>
+            <button class="btn-dash" onclick="apriGara('Agility', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Agility
+            </button>
+            <button class="btn-dash" onclick="apriGara('Jumping', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Jumping
+            </button>
+            <button class="btn-dash" onclick="apriGara('Snooker', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Snooker
+            </button>
+            <button class="btn-dash" onclick="apriGara('Gambler', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Gambler
+            </button>
+            <button class="btn-dash" style="border-color:#198754; color:#198754;" onclick="apriGara('Biathlon B1', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Biathlon B1
+            </button>
+            <button class="btn-dash" style="border-color:#198754; color:#198754;" onclick="apriGara('Biathlon B2', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Biathlon B2
+            </button>
+            <button class="btn-dash" style="border-color:#0d6efd; color:#0d6efd;" onclick="apriGara('Triathlon T1', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Triathlon T1
+            </button>
+            <button class="btn-dash" style="border-color:#0d6efd; color:#0d6efd;" onclick="apriGara('Triathlon T2', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Triathlon T2
+            </button>
+            <button class="btn-dash" style="background:#0d6efd; color:white;" onclick="apriGara('Triathlon T3', this)">
+                <img src="https://lh3.googleusercontent.com/d/1xSYvZbiAhhpNat57RXdc0nE11ocZKXry" class="dash-icon" crossorigin="anonymous"> Triathlon T3
+            </button>
         </div>
 
         <div class="filter-bar" id="barra-filtri">
-            <label id="lbl-height" style="color:#004085; font-weight:bold; margin-right:10px;">Height (Jump-Up):</label>
+            <label id="lbl-height" style="color:#004085; font-weight:bold; margin-right:10px;">Altezza (Jump-Up):</label>
             <select id="altezza-live" onchange="disegnaClassificaLive()">
                 <option value="250">250</option>
                 <option value="300">300</option>
@@ -80,7 +98,7 @@
             <div id="badge-sync" class="status-badge status-syncing">↻ Aggiornamento in corso...</div>
         </div>
 
-        <div id="welcome-msg" class="lang-txt" data-key="welcome">Seleziona una gara dal menu in alto per visualizzare la classifica in tempo reale.</div>
+        <div id="welcome-msg">Seleziona una gara dal menu in alto per visualizzare la classifica in tempo reale.</div>
         
         <div class="table-container" id="area-tabella" style="display:none;">
             <table>
@@ -94,8 +112,20 @@
     // --- GESTIONE LINGUE ---
     let lang = 'it';
     const dict = {
-        'it': { title: 'WAC 2027 Live Results', height: 'Altezza (Jump-Up):', sync: '↻ Ricerca nuovi tempi...', conn: '🟢 Connesso al server gara. Seleziona una competizione in alto.', live: '🟢 Risultati Live (Auto-Sync)', err: '🔴 Errore di connessione. Riprovo...', welcome: 'Seleziona una gara dal menu in alto per visualizzare la classifica in tempo reale.', no_ath: 'Nessun atleta in questa altezza.', ord: 'ORD.', pett: 'PETT.', bin: 'BINOMIO', time: 'TEMPO', errs: 'ERRORI', ref: 'RIFIUTI', ea: 'E / A', pen: 'PEN. TOTALI', rank: 'RANK' },
-        'en': { title: 'WAC 2027 Live Results', height: 'Height (Jump-Up):', sync: '↻ Syncing...', conn: '🟢 Connected to server. Select a competition.', live: '🟢 Live Results (Auto-Sync)', err: '🔴 Connection error. Retrying...', welcome: 'Select a competition from the top menu to view live standings.', no_ath: 'No athletes in this height.', ord: 'ORD.', pett: 'BIB', bin: 'HANDLER & DOG', time: 'TIME', errs: 'FAULTS', ref: 'REFUSALS', ea: 'E / A', pen: 'TOTAL PEN.', rank: 'RANK' }
+        'it': { 
+            title: 'WAC 2027 Live Results', height: 'Altezza (Jump-Up):', sync: '↻ Ricerca nuovi tempi...', 
+            conn: '🟢 Connesso al server gara. Seleziona una competizione in alto.', live: '🟢 Risultati Live (Auto-Sync)', 
+            err: '🔴 Errore di connessione. Riprovo...', welcome: 'Seleziona una gara dal menu in alto per visualizzare la classifica in tempo reale.', 
+            no_ath: 'Nessun atleta in questa altezza.', ord: 'ORD.', pett: 'PETT.', bin: 'BINOMIO', time: 'TEMPO', 
+            errs: 'ERRORI', ref: 'RIFIUTI', ea: 'E / A', pen: 'PEN. TOTALI', rank: 'RANK' 
+        },
+        'en': { 
+            title: 'WAC 2027 Live Results', height: 'Height (Jump-Up):', sync: '↻ Syncing...', 
+            conn: '🟢 Connected to server. Select a competition.', live: '🟢 Live Results (Auto-Sync)', 
+            err: '🔴 Connection error. Retrying...', welcome: 'Select a competition from the top menu to view live standings.', 
+            no_ath: 'No athletes in this height.', ord: 'ORD.', pett: 'BIB', bin: 'HANDLER & DOG', time: 'TIME', 
+            errs: 'FAULTS', ref: 'REFUSALS', ea: 'E / A', pen: 'TOTAL PEN.', rank: 'RANK' 
+        }
     };
 
     function toggleLanguage() {
@@ -105,43 +135,71 @@
         document.getElementById('lbl-height').innerText = dict[lang].height;
         
         let msg = document.getElementById('welcome-msg');
-        if(msg.innerText.includes("Connesso") || msg.innerText.includes("Connected")) msg.innerText = dict[lang].conn;
-        else msg.innerText = dict[lang].welcome;
+        if (msg.innerText.includes("Connesso") || msg.innerText.includes("Connected")) {
+            msg.innerText = dict[lang].conn;
+        } else {
+            msg.innerText = dict[lang].welcome;
+        }
         
         let badge = document.getElementById('badge-sync');
-        if(badge.innerText.includes("Live")) badge.innerText = dict[lang].live;
+        if (badge.innerText.includes("Live")) {
+            badge.innerText = dict[lang].live;
+        }
 
-        if(garaAttiva !== "") disegnaClassificaLive();
+        if (garaAttiva !== "") {
+            disegnaClassificaLive();
+        }
     }
 
     const MIO_LINK_SCRIPT = "https://script.google.com/macros/s/AKfycbw6qAxK-JyVMM5pnHLGOQQCbk_mfa9CPo3hft-1vOe8AFxEGPVGRh7d-YmRzpKirANd/exec";
     const SCRIPT_URL = MIO_LINK_SCRIPT + "?azione=ottieni_dati_live";
 
-    let iscrittiLive = []; let risultatiLive = {}; let squadreLive = []; let garaAttiva = ""; let pollingInterval = null;
-    function getSigla(n) { return n ? `[${n.substring(0,3).toUpperCase()}]` : ""; }
+    let iscrittiLive = []; 
+    let risultatiLive = {}; 
+    let squadreLive = []; 
+    let garaAttiva = ""; 
+    let pollingInterval = null;
+    
+    function getSigla(n) { 
+        // Traduzione dinamica della sigla a prescindere dalla lingua in cui è stata salvata
+        const map = {"Italy":"ITA", "Italia":"ITA", "Spain":"ESP", "Spagna":"ESP", "France":"FRA", "Francia":"FRA", "Great Britain":"GBR", "Gran Bretagna":"GBR", "Germany":"GER", "Germania":"GER", "Switzerland":"SUI", "Svizzera":"SUI", "United States":"USA", "Stati Uniti":"USA", "Japan":"JPN", "Giappone":"JPN", "Belgium":"BEL", "Belgio":"BEL", "Netherlands":"NED", "Olanda":"NED"};
+        if (map[n]) return '[' + map[n] + ']';
+        return n ? `[${n.substring(0,3).toUpperCase()}]` : ""; 
+    }
 
     function scaricaDatiServer(isPrimoAvvio) {
-        if(!isPrimoAvvio) {
+        if (!isPrimoAvvio) {
             document.getElementById('badge-sync').className = "status-badge status-syncing";
             document.getElementById('badge-sync').innerText = dict[lang].sync;
         }
+        
         let script = document.createElement('script');
         script.src = SCRIPT_URL + "&callback=gestisciDatiJsonp&t=" + new Date().getTime();
+        
         script.onerror = function() {
             document.getElementById('badge-sync').className = "status-badge status-syncing";
             document.getElementById('badge-sync').innerText = dict[lang].err;
         };
+        
         document.body.appendChild(script);
         script.onload = function() { document.body.removeChild(script); };
     }
 
     function gestisciDatiJsonp(data) {
         if (data.errore) return;
-        iscrittiLive = data.iscritti || []; risultatiLive = data.risultati || {}; squadreLive = data.squadre || [];
+        
+        iscrittiLive = data.iscritti || []; 
+        risultatiLive = data.risultati || {}; 
+        squadreLive = data.squadre || [];
         
         let msgBenvenuto = document.getElementById('welcome-msg');
-        if (msgBenvenuto && msgBenvenuto.style.display !== 'none') msgBenvenuto.innerText = dict[lang].conn;
-        if (garaAttiva !== "") disegnaClassificaLive(); 
+        if (msgBenvenuto && msgBenvenuto.style.display !== 'none') {
+            msgBenvenuto.innerText = dict[lang].conn;
+        }
+        
+        if (garaAttiva !== "") {
+            disegnaClassificaLive(); 
+        }
         
         document.getElementById('badge-sync').className = "status-badge";
         document.getElementById('badge-sync').innerText = dict[lang].live;
@@ -154,16 +212,20 @@
 
     function apriGara(nomeGara, btn) {
         document.querySelectorAll('.btn-dash').forEach(b => b.classList.remove('active'));
-        if(btn) btn.classList.add('active');
+        if (btn) btn.classList.add('active');
+        
         garaAttiva = nomeGara;
         document.getElementById('welcome-msg').style.display = 'none';
         
         let lblH = document.getElementById('lbl-height');
         let selH = document.getElementById('altezza-live');
+        
         if (garaAttiva === "Triathlon T3") {
-            lblH.style.display = 'none'; selH.style.display = 'none';
+            lblH.style.display = 'none'; 
+            selH.style.display = 'none';
         } else {
-            lblH.style.display = 'inline-block'; selH.style.display = 'inline-block';
+            lblH.style.display = 'inline-block'; 
+            selH.style.display = 'inline-block';
         }
         
         document.getElementById('barra-filtri').style.display = 'block';
@@ -175,33 +237,50 @@
         let head = document.getElementById('live-head');
         let body = document.getElementById('live-body');
         let alt = document.getElementById('altezza-live').value;
+        
         body.innerHTML = "";
-        if(!garaAttiva) return;
-        if(!risultatiLive[garaAttiva]) risultatiLive[garaAttiva] = {};
+        
+        if (!garaAttiva) return;
+        if (!risultatiLive[garaAttiva]) risultatiLive[garaAttiva] = {};
 
-        // === LOGICA TRIATHLON T3 (SQUADRE) ===
+        // === LOGICA TRIATHLON T3 (STAFFETTA A SQUADRE) ===
         if (garaAttiva === "Triathlon T3") {
-            head.innerHTML = `<tr><th width="50">${dict[lang].rank}</th><th class="text-left">TEAM</th><th width="40">${dict[lang].ord}</th><th class="text-left">${dict[lang].bin} (Jump-Up)</th><th width="70">${dict[lang].time}</th><th width="70">${dict[lang].errs}</th><th width="70">${dict[lang].ref}</th><th width="50">${dict[lang].ea}</th><th width="90">${dict[lang].pen}</th></tr>`;
+            head.innerHTML = `<tr>
+                <th width="50">${dict[lang].rank}</th>
+                <th class="text-left">TEAM</th>
+                <th width="40">${dict[lang].ord}</th>
+                <th class="text-left">${dict[lang].bin} (Jump-Up)</th>
+                <th width="70">${dict[lang].time}</th>
+                <th width="70">${dict[lang].errs}</th>
+                <th width="70">${dict[lang].ref}</th>
+                <th width="50">${dict[lang].ea}</th>
+                <th width="90">${dict[lang].pen}</th>
+            </tr>`;
             
             if (!squadreLive || squadreLive.length === 0) {
                 return body.innerHTML = `<tr><td colspan="9" align="center" style="padding:30px; font-style:italic;">Nessuna squadra iscritta.</td></tr>`;
             }
 
             let teamScores = squadreLive.map(sq => {
-                let penT3 = 0; let completi = 0;
+                let penT3 = 0; 
+                let completi = 0;
                 sq.membri.forEach(m => {
                     let d = risultatiLive[garaAttiva][m.pett] || {};
                     let t = parseFloat((d.tempo||"0").toString().replace(',','.'))||0;
-                    if(t > 0 || ['E','A','DIS','ABS'].includes(d.esito)) {
-                        penT3 += (t>0 && !['E','A','DIS','ABS'].includes(d.esito)) ? (t + ((parseInt(d.err)||0)*5) + ((parseInt(d.rif)||0)*5)) : 100;
+                    if (t > 0 || ['E','A','DIS','ABS'].includes(d.esito)) {
+                        penT3 += (t > 0 && !['E','A','DIS','ABS'].includes(d.esito)) ? (t + ((parseInt(d.err)||0)*5) + ((parseInt(d.rif)||0)*5)) : 100;
                         completi++;
-                    } else penT3 += 100;
+                    } else {
+                        penT3 += 100;
+                    }
                 });
                 return { sq: sq, score: penT3, completato: completi === 3 };
             });
 
             let sorted = [...teamScores].sort((a,b) => {
-                if(!a.completato && b.completato) return 1; if(a.completato && !b.completato) return -1; return a.score - b.score;
+                if (!a.completato && b.completato) return 1; 
+                if (a.completato && !b.completato) return -1; 
+                return a.score - b.score;
             });
 
             teamScores.sort((a,b) => {
@@ -212,7 +291,7 @@
 
             teamScores.forEach(ts => {
                 let rankHtml = `<span class="badge-rank out-rank">-</span>`;
-                if(ts.completato) {
+                if (ts.completato) {
                     let r = sorted.findIndex(x => x.sq.id === ts.sq.id) + 1;
                     rankHtml = `<span class="badge-rank">${r}</span>`;
                 }
@@ -229,11 +308,12 @@
                     let ord = (c.ordini && c.ordini[garaAttiva]) ? c.ordini[garaAttiva] : '-';
                     
                     let t = parseFloat((d.tempo||"0").toString().replace(',','.'))||0;
-                    let hasT = (t > 0); let isOut = ['E','A','DIS','ABS'].includes(d.esito);
+                    let hasT = (t > 0); 
+                    let isOut = ['E','A','DIS','ABS'].includes(d.esito);
                     
-                    let oT = (hasT&&!isOut) ? d.tempo : (isOut ? "" : "-");
+                    let oT = (hasT && !isOut) ? d.tempo : (isOut ? "" : "-");
                     let eaVal = isOut ? d.esito : "";
-                    let oS = (hasT&&!isOut) ? (t + ((parseInt(d.err)||0)*5) + ((parseInt(d.rif)||0)*5)).toFixed(3).replace('.',',') : (isOut ? d.esito : "-");
+                    let oS = (hasT && !isOut) ? (t + ((parseInt(d.err)||0)*5) + ((parseInt(d.rif)||0)*5)).toFixed(3).replace('.',',') : (isOut ? d.esito : "-");
                     let rowC = isOut ? "row-out" : "";
 
                     let rowHtml = `<td class="${rowC}"><span class="badge-ord">${ord}</span></td>
@@ -244,13 +324,13 @@
                         <td class="${rowC}" style="font-weight:bold;">${eaVal}</td>
                         <td class="${rowC} score-big">${oS}</td>`;
                     
-                    body.innerHTML += (i===0) ? tr1 + rowHtml + "</tr>" : `<tr class="${sqClass}">${rowHtml}</tr>`;
+                    body.innerHTML += (i === 0) ? tr1 + rowHtml + "</tr>" : `<tr class="${sqClass}">${rowHtml}</tr>`;
                 });
             });
             return;
         }
 
-        // === LOGICA STANDARD 9 COLONNE (T1, T2 compresi) ===
+        // === LOGICA STANDARD 9 COLONNE (Tutte le altre gare) ===
         head.innerHTML = `<tr>
             <th width="40">${dict[lang].ord}</th>
             <th width="50">${dict[lang].pett}</th>
@@ -279,7 +359,7 @@
             });
         }
 
-        if(atleti.length === 0) {
+        if (atleti.length === 0) {
             return body.innerHTML = `<tr><td colspan="9" align="center" style="padding:30px; font-style:italic;">${dict[lang].no_ath}</td></tr>`;
         }
 
@@ -288,7 +368,9 @@
             let floatT = parseFloat((d.tempo||"0").toString().replace(',','.')) || 0; 
             let hasT = (floatT > 0); 
             let isOut = ['E','A','DIS','ABS'].includes(d.esito);
-            let scoreF = 0; let testoS = "-"; let eaVal = "";
+            let scoreF = 0; 
+            let testoS = "-"; 
+            let eaVal = "";
 
             if (isOut) { 
                 eaVal = d.esito; 
@@ -302,20 +384,22 @@
             return { ...item, d: d, hasT: hasT, isOut: isOut, scoreF: scoreF, testoS: testoS, eaVal: eaVal, ord: ord };
         });
 
-        // Ordinamento per RANK
         let ordinati = [...calcolati].sort((a,b) => { 
-            if(a.isOut && !b.isOut) return 1; if(!a.isOut && b.isOut) return -1; if(!a.hasT && b.hasT) return 1; if(a.hasT && !b.hasT) return -1; if(!a.hasT && !b.hasT) return 0; 
+            if(a.isOut && !b.isOut) return 1; 
+            if(!a.isOut && b.isOut) return -1; 
+            if(!a.hasT && b.hasT) return 1; 
+            if(a.hasT && !b.hasT) return -1; 
+            if(!a.hasT && !b.hasT) return 0; 
             return a.scoreF - b.scoreF; 
         });
 
-        // Ordinamento VISIVO (Per ordine di partenza)
         calcolati.sort((a,b) => a.ord - b.ord);
 
         calcolati.forEach((item) => {
             let rowClass = item.isOut ? "row-out" : "";
             
             let rankHtml = `<span class="badge-rank out-rank">-</span>`;
-            if(item.hasT && !item.isOut) {
+            if (item.hasT && !item.isOut) {
                 let r = ordinati.findIndex(x => x.pett === item.pett) + 1;
                 rankHtml = `<span class="badge-rank">${r}</span>`;
             }
