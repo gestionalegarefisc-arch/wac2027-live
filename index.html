@@ -117,14 +117,14 @@
             conn: '🟢 Connesso al server gara. Seleziona una competizione in alto.', live: '🟢 Risultati Live (Auto-Sync)', 
             err: '🔴 Errore di connessione. Riprovo...', welcome: 'Seleziona una gara dal menu in alto per visualizzare la classifica in tempo reale.', 
             no_ath: 'Nessun atleta in questa altezza.', ord: 'ORD.', pett: 'PETT.', bin: 'BINOMIO', time: 'TEMPO', 
-            errs: 'ERRORI', ref: 'RIFIUTI', ea: 'E / A', pen: 'PEN. TOTALI', rank: 'RANK' 
+            errs: 'ERRORI', ref: 'RIFIUTI', ea: 'E / A', pen: 'PEN. TOTALI', pts: 'PUNTI', rank: 'RANK' 
         },
         'en': { 
             title: 'WAC 2027 Live Results', height: 'Height (Jump-Up):', sync: '↻ Syncing...', 
             conn: '🟢 Connected to server. Select a competition.', live: '🟢 Live Results (Auto-Sync)', 
             err: '🔴 Connection error. Retrying...', welcome: 'Select a competition from the top menu to view live standings.', 
             no_ath: 'No athletes in this height.', ord: 'ORD.', pett: 'BIB', bin: 'HANDLER & DOG', time: 'TIME', 
-            errs: 'FAULTS', ref: 'REFUSALS', ea: 'E / A', pen: 'TOTAL PEN.', rank: 'RANK' 
+            errs: 'FAULTS', ref: 'REFUSALS', ea: 'E / A', pen: 'TOTAL PEN.', pts: 'POINTS', rank: 'RANK' 
         }
     };
 
@@ -330,16 +330,21 @@
             return;
         }
 
-        // === LOGICA STANDARD 9 COLONNE (Tutte le altre gare) ===
+        // === LOGICA STANDARD (Agility, Jumping, Giochi, Biathlon) ===
+        // Interruttore magico: scopriamo se la gara è un gioco a punti
+        let isGame = (garaAttiva === 'Snooker' || garaAttiva === 'Gambler');
+        
+        let headerScore = isGame ? dict[lang].pts : dict[lang].pen;
+        let colsHead = isGame ? "" : `<th width="70">${dict[lang].errs}</th><th width="70">${dict[lang].ref}</th>`;
+
         head.innerHTML = `<tr>
             <th width="40">${dict[lang].ord}</th>
             <th width="50">${dict[lang].pett}</th>
             <th class="text-left">${dict[lang].bin}</th>
             <th width="70">${dict[lang].time}</th>
-            <th width="70">${dict[lang].errs}</th>
-            <th width="70">${dict[lang].ref}</th>
+            ${colsHead}
             <th width="50">${dict[lang].ea}</th>
-            <th width="90">${dict[lang].pen}</th>
+            <th width="90">${headerScore}</th>
             <th width="50">${dict[lang].rank}</th>
         </tr>`;
 
@@ -347,14 +352,14 @@
         if (garaAttiva.includes('Triathlon') && garaAttiva !== 'Triathlon T3') {
             squadreLive.forEach(sq => {
                 sq.membri.forEach(m => {
-                    if (m.jumpUp === alt) {
-                        let c = iscrittiLive.find(x => x.pett === m.pett);
+                    if (String(m.jumpUp) === String(alt)) {
+                        let c = iscrittiLive.find(x => String(x.pett) === String(m.pett));
                         if (c) atleti.push({ c: c, isTeam: true, sq: sq, pett: m.pett });
                     }
                 });
             });
         } else {
-            iscrittiLive.filter(b => b.cat === alt).forEach(c => {
+            iscrittiLive.filter(b => String(b.cat) === String(alt)).forEach(c => {
                 atleti.push({ c: c, isTeam: false, pett: c.pett });
             });
         }
@@ -376,8 +381,15 @@
                 eaVal = d.esito; 
                 testoS = d.esito; 
             } else if (hasT) { 
-                scoreF = floatT + ((parseInt(d.err)||0)*5) + ((parseInt(d.rif)||0)*5); 
-                testoS = scoreF.toFixed(3).replace('.', ','); 
+                if (isGame) {
+                    // Nel Gambler e Snooker il vero punteggio è salvato in d.punti
+                    scoreF = parseInt(d.punti) || 0;
+                    testoS = scoreF.toString();
+                } else {
+                    // Nelle gare classiche calcola tempo + penalità
+                    scoreF = floatT + ((parseInt(d.err)||0)*5) + ((parseInt(d.rif)||0)*5); 
+                    testoS = scoreF.toFixed(3).replace('.', ','); 
+                }
             }
             
             let ord = (item.c.ordini && item.c.ordini[garaAttiva]) ? parseInt(item.c.ordini[garaAttiva]) : 999;
@@ -390,6 +402,11 @@
             if(!a.hasT && b.hasT) return 1; 
             if(a.hasT && !b.hasT) return -1; 
             if(!a.hasT && !b.hasT) return 0; 
+            
+            // Nel Gambler/Snooker vince chi ha il punteggio PIÙ ALTO
+            if (isGame) return b.scoreF - a.scoreF; 
+            
+            // In Agility vince chi ha il tempo PIÙ BASSO
             return a.scoreF - b.scoreF; 
         });
 
@@ -400,7 +417,7 @@
             
             let rankHtml = `<span class="badge-rank out-rank">-</span>`;
             if (item.hasT && !item.isOut) {
-                let r = ordinati.findIndex(x => x.pett === item.pett) + 1;
+                let r = ordinati.findIndex(x => String(x.pett) === String(item.pett)) + 1;
                 rankHtml = `<span class="badge-rank">${r}</span>`;
             }
 
@@ -414,13 +431,14 @@
             let showRif = (item.hasT && !item.isOut) ? (item.d.rif || "") : "";
             let showOrd = item.ord !== 999 ? item.ord : "-";
 
+            let colsBody = isGame ? "" : `<td>${showErr}</td><td>${showRif}</td>`;
+
             let h = `<tr class="${rowClass}">
                 <td><span class="badge-ord">${showOrd}</span></td>
                 <td><b>${item.pett}</b></td>
                 <td class="text-left">${nomeHtml}</td>
                 <td><b>${showTime}</b></td>
-                <td>${showErr}</td>
-                <td>${showRif}</td>
+                ${colsBody}
                 <td style="font-weight:bold;">${item.eaVal}</td>
                 <td class="score-big">${item.testoS}</td>
                 <td>${rankHtml}</td>
